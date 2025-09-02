@@ -1,208 +1,172 @@
 # Flutter Common Components
 
-一个用于构建响应式 Flutter 应用的通用 UI 组件库。
+A collection of common Flutter UI components for building responsive applications.
 
-## 功能特性
+## Features
 
-- 🎯 **响应式设计** - 支持手机、平板、桌面等不同屏幕尺寸
-- 🎨 **Material Design** - 遵循 Material Design 设计规范
-- 🔧 **高度可定制** - 提供丰富的自定义选项
-- 📱 **移动端优化** - 针对移动端提供专门的组件变体
-- 🚀 **易于使用** - 简洁的 API 设计
+### Common Components
+- **Circular Progress Cards**: Display statistics with circular progress indicators
+- **Info Buttons**: Icon and text button variants for displaying information
+- **Info Rows**: Builder function for creating consistent info display rows
+- **Module Containers**: Container component for organizing content modules
+- **Pagination Widget**: Customizable pagination with various styles
+- **Summary Cards**: Desktop and mobile versions for displaying key metrics
+- **Top-Level Snackbars**: Notification system for app-wide messages
 
-## 安装
+### Layout Components
+- **ResponsiveScaffold**: Animated responsive scaffold with side menu
+- **ResponsiveLayout**: Base layout component with AppBar and TabBar support
+- **ResponsivePage**: Page component with responsive content builder
+- **ResponsiveUtils**: Screen type detection and responsive helpers
 
-在你的 `pubspec.yaml` 文件中添加依赖：
+### Template Components
+- **TabBarContainer**: Container with automatic TabController management
+- **TabBarStyle**: Preset styles for TabBar components
+- **SimpleTabView**: Simple tab view implementation
+
+### Dialog Components
+- **AppAboutDialog**: About dialog with package information
+
+## Installation
+
+Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
   flutter_common_components:
-    path: ../flutter_common_components  # 本地路径
-    # 或者如果发布到 pub.dev
-    # flutter_common_components: ^0.0.1
+    git:
+      url: https://github.com/zpy-0713/fl_common_components.git
+      ref: main
 ```
 
-然后运行：
+## Usage
 
-```bash
-flutter pub get
-```
-
-## 使用方法
-
-### 导入库
+Import the package in your Dart code:
 
 ```dart
 import 'package:flutter_common_components/flutter_common_components.dart';
 ```
 
-### 组件示例
+### Layout Components
 
-#### 1. 环状进度卡片
+#### ResponsiveScaffold
 
 ```dart
-CircularProgressCard(
-  title: '完成率',
-  percentage: 75.5,
-  numerator: 151,
-  denominator: 200,
-  color: Colors.blue,
-)
-
-// 移动端版本
-MobileCircularProgressCard(
-  title: '完成率',
-  percentage: 75.5,
-  numerator: 151,
-  denominator: 200,
-  color: Colors.blue,
+ResponsiveScaffold(
+  title: Text('My App'),
+  menuTitle: Image.asset('assets/logo.png'),
+  menuItems: [
+    ResponsiveMenuItems(
+      label: 'Home',
+      icon: Icons.home,
+      route: 'home',
+    ),
+    ResponsiveMenuItems(
+      label: 'Settings',
+      icon: Icons.settings,
+      route: 'settings',
+    ),
+  ],
+  onSelect: (index) => print('Selected item $index'),
+  body: YourPageContent(),
 )
 ```
 
-#### 2. 信息按钮
+#### ResponsiveLayout
 
 ```dart
-InfoIconButton(
-  icon: Icons.info,
-  label: '详细信息',
-  value: '这是一个信息提示',
-  color: Colors.blue,
-)
-
-InfoTextButton(
-  buttonText: '查看详情',
-  label: '详细信息',
-  value: '这是一个信息提示',
-  color: Colors.blue,
+ResponsiveLayout(
+  title: Text('Page Title'),
+  body: YourPageContent(),
+  actions: [
+    IconButton(
+      icon: Icon(Icons.search),
+      onPressed: () => print('Search'),
+    ),
+  ],
 )
 ```
 
-#### 3. 信息行
+#### ResponsivePage
 
 ```dart
-buildInfoRow(
-  context,
-  '用户名',
-  '张三',
-  titleStyle: TextStyle(fontWeight: FontWeight.bold),
-  valueStyle: TextStyle(color: Colors.blue),
-)
-```
-
-#### 4. 模块容器
-
-```dart
-ModuleContainer(
-  context: context,
-  title: '用户管理',
-  subtitle: '管理系统用户信息',
-  icon: Icons.people,
-  iconColor: Colors.blue,
-  headerColor: Colors.blue.withOpacity(0.1),
-  child: YourContentWidget(),
-)
-```
-
-#### 5. 统计卡片
-
-```dart
-SummaryCard(
-  icon: Icons.people,
-  value: '1,234',
-  label: '总用户数',
-  isWide: true,
-  color: Colors.green,
-)
-
-// 移动端版本
-MobileSummaryCard(
-  icon: Icons.people,
-  value: '1,234',
-  label: '总用户数',
-  color: Colors.green,
-)
-```
-
-#### 6. 分页组件
-
-```dart
-PaginationWidget(
-  currentPage: 1,
-  totalItems: 100,
-  pageSize: 10,
-  onPageChanged: (page) {
-    // 处理页码变化
+ResponsivePage(
+  title: Text('Responsive Page'),
+  contentBuilder: (context, screenType) {
+    switch (screenType) {
+      case ScreenType.mobile:
+        return MobileLayout();
+      case ScreenType.tablet:
+        return TabletLayout();
+      case ScreenType.desktop:
+        return DesktopLayout();
+    }
   },
-  showTotalCount: true,
-  showJumpInput: true,
 )
 ```
 
-#### 7. 顶部通知栏
+### Template Components
+
+#### TabBarContainer
 
 ```dart
-TopLevelSnackBar.showSuccess(context, '操作成功！');
-TopLevelSnackBar.showError(context, '操作失败！');
-TopLevelSnackBar.showWarning(context, '请注意！');
+TabBarContainer(
+  tabs: [
+    Tab(text: 'Tab 1'),
+    Tab(text: 'Tab 2'),
+    Tab(text: 'Tab 3'),
+  ],
+  tabBuilder: (context, index) {
+    return Center(child: Text('Content for Tab ${index + 1}'));
+  },
+  onTabChanged: (index) => print('Tab $index selected'),
+)
 ```
 
-#### 8. 响应式工具
+### Dialog Components
+
+#### AppAboutDialog
 
 ```dart
-// 检查屏幕类型
-if (CommonResponsiveUtils.isMobile(context)) {
-  // 手机端逻辑
-} else if (CommonResponsiveUtils.isTablet(context)) {
-  // 平板端逻辑
-} else {
-  // 桌面端逻辑
-}
-
-// 响应式值
-final fontSize = CommonResponsiveUtils.responsive(
-  context,
-  mobile: 14.0,
-  tablet: 16.0,
-  desktop: 18.0,
+showDialog(
+  context: context,
+  builder: (context) => AppAboutDialog(),
 );
 ```
 
-## 自定义样式
-
-大多数组件都支持自定义样式，例如：
+### Responsive Utilities
 
 ```dart
-PaginationWidget(
-  // ... 其他参数
-  style: PaginationStyle(
-    containerPadding: EdgeInsets.all(16),
-    spacing: 20.0,
-    inputWidth: 60.0,
-    jumpButtonText: 'Go',
-  ),
-)
-```
+// Check screen type
+if (ResponsiveUtils.isMobile(context)) {
+  // Mobile-specific code
+}
 
-## 响应式断点
+// Get screen type
+final screenType = ResponsiveUtils.getScreenType(context);
 
-默认的响应式断点：
-- 手机：< 450px
-- 平板：450px - 900px  
-- 桌面：> 900px
-
-你可以自定义这些断点：
-
-```dart
-CommonResponsiveUtils.isMobile(
+// Responsive values
+final padding = ResponsiveUtils.responsive(
   context,
-  phoneBreakpoint: 600.0, // 自定义断点
-)
+  mobile: 16.0,
+  tablet: 24.0,
+  desktop: 32.0,
+);
+
+// Using the common utilities (with prefix to avoid conflicts)
+if (CommonResponsiveUtils.isMobile(context)) {
+  // Mobile-specific code
+}
 ```
 
-## 许可证
+## Contributing
 
-MIT License
+1. Fork the repository
+2. Create your feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit your changes (`git commit -m 'Add some amazing feature'`)
+4. Push to the branch (`git push origin feature/amazing-feature`)
+5. Open a Pull Request
 
-## 贡献
+## License
 
-欢迎提交 Issue 和 Pull Request！
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
